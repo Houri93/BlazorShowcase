@@ -1,0 +1,56 @@
+﻿@using BlazorShowcase.Employees
+@using Humanizer
+
+<PageTitle>Employees</PageTitle>
+
+<MudTable @ref="table" ServerData="QueryEmployeesAsync" Height="calc(100vh - 180px)" FixedHeader="true" T="Employee" Virtualize="true" Loading="loading">
+
+    <ToolBarContent>
+        <MudText Typo="Typo.h6" Color="Color.Primary">Employees (query time @responseTime.Milliseconds ms)</MudText>
+        <MudSpacer />
+        <MudTextField T="string"
+                      Placeholder="Search ..."
+                      Value="filterText"
+                      Immediate="true"
+                      DebounceInterval="100"
+                      Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium"
+                      Class="mt-0" ValueChanged="FilterTextChanged" />
+    </ToolBarContent>
+
+    <HeaderContent>
+        <MudTh><MudTableSortLabel InitialDirection="SortDirection.Descending" SortLabel="@nameof(Employee.Created)" T="Employee">Created</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Name)" T="Employee">First name</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Email)" T="Employee"> Email</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Birth)" T="Employee">DoB</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Address)" T="Employee">Address</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.PhoneNumber)" T="Employee">Phone Number</MudTableSortLabel></MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="@nameof(Employee.Created)">
+            <MudHighlighter HighlightedText="@filterText" Text="@MakeCreatedString(context.Created)" />
+        </MudTd>
+        <MudTd DataLabel="@nameof(Employee.Name)">
+            <MudHighlighter HighlightedText="@filterText" Text="@context.Name" />
+        </MudTd>
+        <MudTd DataLabel="@nameof(Employee.Email)">
+            <MudHighlighter HighlightedText="@filterText" Text="@context.Email" />
+        </MudTd>
+        <MudTd DataLabel="@nameof(Employee.Birth)">
+            <MudHighlighter HighlightedText="@filterText" Text="@MakeDobString(DateOnly.FromDateTime(context.Birth))" />
+        </MudTd>
+        <MudTd DataLabel="@nameof(Employee.Address)">
+            <MudHighlighter HighlightedText="@filterText" Text="@context.Address" />
+        </MudTd>
+        <MudTd DataLabel="@nameof(Employee.PhoneNumber)">
+            <MudHighlighter HighlightedText="@filterText" Text="@context.PhoneNumber" />
+        </MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+
+</MudTable>

@@ -1,0 +1,12 @@
+﻿@page "/stream"
+
+<PageTitle>Stream Chart</PageTitle>
+
+<Chart @ref="chart"
+       Series="series"
+       AutoSetSeriesColors="true"
+       ShowFrozenToggle="true"
+       ShowPointsCount="true"
+       StreamPointsCount="150"          
+       LabelX="Time"
+       LabelY="Voltage" />

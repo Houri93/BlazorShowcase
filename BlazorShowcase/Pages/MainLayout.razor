@@ -1,0 +1,49 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>Blazor Showcase</PageTitle>
+
+<MudThemeProvider @bind-IsDarkMode="darkMode" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<AuthorizeView>
+    <Authorized>
+        <MudLayout>
+            <MudAppBar Fixed="true" Style="background-color:var(--mud-palette-background);">
+
+                <MudIconButton Icon="@Icons.Filled.Menu" OnClick="ShowMenuDialog" Class="@ShowOnMobileClass" Color="Color.Default" />
+
+                <MudText Color="Color.Primary" Typo="Typo.h5">Houri's Blazor Sample</MudText>
+
+                <MudContainer Class="@HideOnMobileClass" MaxWidth="MaxWidth.Small">
+                    <NavLinks />
+                </MudContainer>
+
+                <MudSpacer />
+
+                <MudIconButton Icon="@Icons.Filled.Logout"
+                               Color="Color.Default"
+                               OnClick="LogoutAsync"
+                               Edge="Edge.End" />
+                <MudToggleIconButton Toggled="darkMode"
+                                     ToggledChanged="DarkModeChangedAsync"
+                                     Icon="@Icons.Filled.DarkMode"
+                                     ToggledIcon="@Icons.Filled.LightMode"
+                                     Color="Color.Default"
+                                     ToggledColor="Color.Warning"
+                                     Edge="Edge.End" />
+
+            </MudAppBar>
+
+            <MudMainContent>
+                <MudContainer>
+                    @Body
+                </MudContainer>
+            </MudMainContent>
+        </MudLayout>
+
+    </Authorized>
+    <NotAuthorized>
+        <LoginComp />
+    </NotAuthorized>
+</AuthorizeView>

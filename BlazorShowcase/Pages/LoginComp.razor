@@ -1,0 +1,35 @@
+<MudContainer Style="height:100vh; width:100vw;" Class="d-flex justify-center align-center">
+    <MudContainer Style="width:350px;">
+        <MudStack>
+            <MudStack Row="true">
+                <MudSpacer></MudSpacer>
+                <MudImage Src="blazor.png" Width="100" />
+                <MudSpacer></MudSpacer>
+            </MudStack>          
+
+
+            <MudTextField AutoFocus="true"
+                          Label="Username ..."
+                          @bind-Value="@username"
+                          @onclick="ClearError"
+                          OnKeyUp="UsernameEnterClicked" />
+
+            <MudTextField @ref="passwordInput"
+                          @bind-Value="password"
+                          @onclick="ClearError"
+                          Label="Password ..."
+                          InputType="@PasswordInputType()"
+                          Adornment="Adornment.End"
+                          AdornmentIcon="@PasswordInputIcon()"
+                          OnAdornmentClick="TogglePasswordShow"
+                          OnKeyUp="PasswordEnterClicked" />
+
+            <MudButton StartIcon="@Icons.Filled.AccountCircle"
+                       FullWidth="true"
+                       OnClick="TryLoginAsync"
+                       Color="Color.Primary">Login</MudButton>
+
+            <MudText Color="Color.Error" Align="Align.Center">@error</MudText>
+        </MudStack>
+    </MudContainer>
+</MudContainer>

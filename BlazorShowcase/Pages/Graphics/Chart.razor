@@ -1,0 +1,18 @@
+﻿
+<canvas id="@id"></canvas>
+
+<MudPaper MaxWidth="500px" Elevation="0">
+    <MudStack Row="true">
+        @if (ShowFrozenToggle)
+        {
+            <MudSwitch @bind-Checked="Frozen" Label="Pause" Color="Color.Primary" />
+        }
+
+        @if (ShowPointsCount)
+        {
+            <MudNumericField T="int" Label="Points" Value="StreamPointsCount" Min="0" ValueChanged="StreamPointsCountChanged" Immediate="true" />
+        }
+    </MudStack>
+
+</MudPaper>
+
