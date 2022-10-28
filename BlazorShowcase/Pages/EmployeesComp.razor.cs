@@ -10,11 +10,10 @@ using System.Diagnostics;
 
 namespace BlazorShowcase.Pages;
 
-public partial class EmployeesComp:IDisposable
+public partial class EmployeesComp : IDisposable
 {
     private MudTable<Employee> table;
     private string filterText = string.Empty;
-    private TimeSpan responseTime = TimeSpan.Zero;
     private bool loading = false;
     [Inject] IEmployeeService EmployeeService { get; set; }
     [Inject] ISnackbar Snackbar { get; set; }
@@ -35,11 +34,7 @@ public partial class EmployeesComp:IDisposable
 
     private async Task<TableData<Employee>> QueryEmployeesAsync(TableState tableState)
     {
-        loading = true;
-        var sw = Stopwatch.StartNew();
         var tableData = await EmployeeService.QueryEmployeesAsync(tableState, filterText);
-        responseTime = sw.Elapsed;
-        loading = false;
         return tableData;
     }
 
