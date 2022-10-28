@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 
 namespace BlazorShowcase.Pages;
 
-public sealed partial class StreamChartComp
+public sealed partial class StreamChartComp : IDisposable
 {
     private readonly Series[] series = new Series[WaveGeneratorServiceHelpers.WavesCount];
     private Chart chart;
@@ -25,14 +25,16 @@ public sealed partial class StreamChartComp
             };
         }
 
-        WaveGeneratorService.PointAdded += WaveGeneratorService_PointAdded; ;
+        WaveGeneratorService.PointAdded += WaveGeneratorService_PointAdded;
     }
 
     private void WaveGeneratorService_PointAdded(int waveIndex, double time, double value)
     {
-        InvokeAsync(async () =>
-        {
-            await chart.AddPoint(waveIndex, time, value);
-        });
+        InvokeAsync(async () => await chart.AddPoint(waveIndex, time, value));
+    }
+
+    public void Dispose()
+    {
+        WaveGeneratorService.PointAdded -= WaveGeneratorService_PointAdded;
     }
 }
