@@ -1,35 +1,38 @@
 <MudContainer Style="height:100vh; width:100vw;" Class="d-flex justify-center align-center">
-    <MudContainer Style="width:350px;">
-        <MudStack>
-            <MudStack Row="true">
-                <MudSpacer></MudSpacer>
-                <MudImage Src="blazor.png" Width="100" />
-                <MudSpacer></MudSpacer>
-            </MudStack>          
+    <MudPaper Elevation="10">
+        <MudContainer Style="width:350px; padding-top:20px;">
+            <MudStack>
+                <MudStack Row="true">
+                    <MudSpacer></MudSpacer>
+                    <MudImage Src="blazor.png" Style="filter: drop-shadow(5px 5px 2px darkgray);" Width="100" />
+                    <MudSpacer></MudSpacer>
+                </MudStack>
 
 
-            <MudTextField AutoFocus="true"
-                          Label="Username ..."
-                          @bind-Value="@username"
-                          @onclick="ClearError"
-                          OnKeyUp="UsernameEnterClicked" />
+                <MudTextField AutoFocus="true"
+                              Label="Username ..."
+                              @bind-Value="@username"
+                              @onclick="ClearError"
+                              OnKeyUp="UsernameEnterClicked" />
 
-            <MudTextField @ref="passwordInput"
-                          @bind-Value="password"
-                          @onclick="ClearError"
-                          Label="Password ..."
-                          InputType="@PasswordInputType()"
-                          Adornment="Adornment.End"
-                          AdornmentIcon="@PasswordInputIcon()"
-                          OnAdornmentClick="TogglePasswordShow"
-                          OnKeyUp="PasswordEnterClicked" />
+                <MudTextField @ref="passwordInput"
+                              @bind-Value="password"
+                              @onclick="ClearError"
+                              Label="Password ..."
+                              InputType="@PasswordInputType()"
+                              Adornment="Adornment.End"
+                              AdornmentIcon="@PasswordInputIcon()"
+                              OnAdornmentClick="TogglePasswordShow"
+                              OnKeyUp="PasswordEnterClicked" />
 
-            <MudButton StartIcon="@Icons.Filled.AccountCircle"
-                       FullWidth="true"
-                       OnClick="TryLoginAsync"
-                       Color="Color.Primary">Login</MudButton>
+                <MudButton StartIcon="@Icons.Filled.AccountCircle"
+                           FullWidth="true"
+                           OnClick="TryLoginAsync"
+                           Color="Color.Primary">Login</MudButton>
 
-            <MudText Color="Color.Error" Align="Align.Center">@error</MudText>
-        </MudStack>
-    </MudContainer>
+                <MudText Color="Color.Error" Align="Align.Center">@error</MudText>
+            </MudStack>
+        </MudContainer>
+    </MudPaper>
+
 </MudContainer>

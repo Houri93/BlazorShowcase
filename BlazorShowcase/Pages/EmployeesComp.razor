@@ -25,26 +25,26 @@
         <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Email)" T="Employee"> Email</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Birth)" T="Employee">DoB</MudTableSortLabel></MudTh>
         <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.Address)" T="Employee">Address</MudTableSortLabel></MudTh>
-        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.PhoneNumber)" T="Employee">Phone Number</MudTableSortLabel></MudTh>
+        <MudTh><MudTableSortLabel SortLabel="@nameof(Employee.PhoneNumber)" T="Employee">Phone</MudTableSortLabel></MudTh>
     </HeaderContent>
 
     <RowTemplate>
-        <MudTd DataLabel="@nameof(Employee.Created)">
+        <MudTd DataLabel="Created">
             <MudHighlighter HighlightedText="@filterText" Text="@MakeCreatedString(context.Created)" />
         </MudTd>
-        <MudTd DataLabel="@nameof(Employee.Name)">
+        <MudTd DataLabel="Name">
             <MudHighlighter HighlightedText="@filterText" Text="@context.Name" />
         </MudTd>
-        <MudTd DataLabel="@nameof(Employee.Email)">
+        <MudTd DataLabel="Email">
             <MudHighlighter HighlightedText="@filterText" Text="@context.Email" />
         </MudTd>
-        <MudTd DataLabel="@nameof(Employee.Birth)">
+        <MudTd DataLabel="DoB">
             <MudHighlighter HighlightedText="@filterText" Text="@MakeDobString(DateOnly.FromDateTime(context.Birth))" />
         </MudTd>
-        <MudTd DataLabel="@nameof(Employee.Address)">
+        <MudTd DataLabel="Address">
             <MudHighlighter HighlightedText="@filterText" Text="@context.Address" />
         </MudTd>
-        <MudTd DataLabel="@nameof(Employee.PhoneNumber)">
+        <MudTd DataLabel="Phone">
             <MudHighlighter HighlightedText="@filterText" Text="@context.PhoneNumber" />
         </MudTd>
     </RowTemplate>

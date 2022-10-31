@@ -63,8 +63,6 @@ app.MapFallbackToPage("/_Host");
 await Init();
 BeginGenerating();
 
-
-
 app.Run();
 
 async Task Init()
@@ -87,7 +85,7 @@ void BeginGenerating()
     {
         while (true)
         {
-            var scope = app.Services.CreateScope();
+            using var scope = app.Services.CreateScope();
             var sp = scope.ServiceProvider;
             var employeeService = sp.GetService<IEmployeeService>();
             await employeeService.GenerateNew(1);
