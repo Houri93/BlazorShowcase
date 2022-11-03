@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 
+using MudBlazor;
 using MudBlazor.Services;
 
 using (var db = new DbCon())
@@ -27,7 +28,12 @@ services.AddAuthorization();
 
 services.AddRazorPages();
 services.AddServerSideBlazor();//.AddCircuitOptions(a => a.DetailedErrors = true);
-services.AddMudServices();
+services.AddMudServices(config =>
+{
+    var snackbarConfig = config.SnackbarConfiguration;
+    snackbarConfig.PositionClass = Defaults.Classes.Position.BottomLeft;
+    snackbarConfig.PreventDuplicates = false;
+});
 
 services.AddHttpContextAccessor();
 services.AddBlazoredLocalStorage();
@@ -88,7 +94,7 @@ void BeginGenerating()
             using var scope = app.Services.CreateScope();
             var sp = scope.ServiceProvider;
             var employeeService = sp.GetService<IEmployeeService>();
-            await employeeService.GenerateNew(1);
+            await employeeService.GenerateNewAsync(1);
             await Task.Delay(5000);
         }
     });

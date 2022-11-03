@@ -19,6 +19,7 @@ public partial class MainLayout
     [Inject] ILocalStorageService LocalStorageService { get; set; }
     [Inject] IAuthService AuthService { get; set; }
     [Inject] IDialogService DialogService { get; set; }
+    [Inject] ISnackbar Snackbar { get; set; }
     protected override async Task OnInitializedAsync()
     {
         darkMode = await LocalStorageService.GetItemAsync<bool>(nameof(darkMode));
@@ -33,6 +34,7 @@ public partial class MainLayout
     private async Task LogoutAsync()
     {
         await AuthService.LogoutAsync();
+        Snackbar.Clear();
     }
     private void ShowMenuDialog()
     {

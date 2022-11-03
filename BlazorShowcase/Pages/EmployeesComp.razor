@@ -3,16 +3,17 @@
 
 <PageTitle>Employees</PageTitle>
 
-<MudTable @ref="table" ServerData="QueryEmployeesAsync" Height="calc(100vh - 180px)" FixedHeader="true" T="Employee" Virtualize="true">
+<MudTable @ref="table" ItemsProvider="ItemsProvider" ServerData="QueryEmployeesAsync" Height="calc(100vh - 180px)" FixedHeader="true" FixedFooter="true" T="Employee" Virtualize="true">
 
     <ToolBarContent>
         <MudText Typo="Typo.h6" Color="Color.Primary">Employees</MudText>
+        <MudIconButton Color="Color.Success" Icon="@Icons.Filled.Add" Size="Size.Large" OnClick="ShowAddDialog" />
         <MudSpacer />
         <MudTextField T="string"
                       Placeholder="Search ..."
                       Value="filterText"
-                      Immediate="true"
-                      DebounceInterval="300"
+                      Immediate="false"
+                      Clearable="true"                     
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"
@@ -39,7 +40,7 @@
             <MudHighlighter HighlightedText="@filterText" Text="@context.Email" />
         </MudTd>
         <MudTd DataLabel="DoB">
-            <MudHighlighter HighlightedText="@filterText" Text="@MakeDobString(DateOnly.FromDateTime(context.Birth))" />
+            <MudHighlighter HighlightedText="@filterText" Text="@MakeDobString(DateOnly.FromDateTime(context.Birth.Value))" />
         </MudTd>
         <MudTd DataLabel="Address">
             <MudHighlighter HighlightedText="@filterText" Text="@context.Address" />
@@ -47,14 +48,27 @@
         <MudTd DataLabel="Phone">
             <MudHighlighter HighlightedText="@filterText" Text="@context.PhoneNumber" />
         </MudTd>
+
     </RowTemplate>
 
-    <PagerContent>
-        <MudTablePager />
-    </PagerContent>
+    @* <PagerContent>
+    <MudTablePager />
+    </PagerContent>*@
 
     <NoRecordsContent>
         No matching records.
     </NoRecordsContent>
 
 </MudTable>
+
+
+<MudPaper Style="margin-top:10px">
+    <MudStack Row="true">
+        <MudSpacer></MudSpacer>
+        <MudText>Total Employees: @totalCount</MudText>
+        <MudSpacer></MudSpacer>
+        <MudText>Filtered Employees: @employeesIds.Length</MudText>
+        <MudSpacer></MudSpacer>
+    </MudStack>
+
+</MudPaper>

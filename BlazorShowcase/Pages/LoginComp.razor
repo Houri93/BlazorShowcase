@@ -1,6 +1,6 @@
-<MudContainer Style="height:100vh; width:100vw;" Class="d-flex justify-center align-center">
+<MudContainer Style="height:100vh; width:100vw;" Class="d-flex justify-center align-center gradient-background" MaxWidth="MaxWidth.False">
     <MudPaper Elevation="10">
-        <MudContainer Style="width:350px; padding-top:20px;">
+        <MudContainer Style="width:350px; height:350px; padding-top:35px;">
             <MudStack>
                 <MudStack Row="true">
                     <MudSpacer></MudSpacer>
@@ -28,7 +28,7 @@
                 <MudButton StartIcon="@Icons.Filled.AccountCircle"
                            FullWidth="true"
                            OnClick="TryLoginAsync"
-                           Color="Color.Primary">Login</MudButton>
+                           Color="HasError() ? Color.Error : Color.Primary">Login</MudButton>
 
                 <MudText Color="Color.Error" Align="Align.Center">@error</MudText>
             </MudStack>

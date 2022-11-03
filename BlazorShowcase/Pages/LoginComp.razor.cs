@@ -59,6 +59,8 @@ public partial class LoginComp
 
     private void ClearError()
     {
-        error = string.Empty;
+        error = null;
     }
+
+    private bool HasError() => error is not null;
 }

@@ -3,38 +3,61 @@
 using Humanizer;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 using MudBlazor;
 
 using System.Diagnostics;
 
-namespace BlazorShowcase.Pages;
+using static MudBlazor.CategoryTypes;
 
+namespace BlazorShowcase.Pages;
 public partial class EmployeesComp : IDisposable
 {
     private MudTable<Employee> table;
+    private int totalCount;
+
+    private Guid[] employeesIds = Array.Empty<Guid>();
     private string filterText = string.Empty;
-    private bool loading = false;
     [Inject] IEmployeeService EmployeeService { get; set; }
     [Inject] ISnackbar Snackbar { get; set; }
+    [Inject] IDialogService DialogService { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         IEmployeeService.Changed += IEmployeeService_Changed;
+        IEmployeeService.NotifyNewName += IEmployeeService_NotifyNewName;
     }
 
+    private void IEmployeeService_NotifyNewName(string name)
+    {
+        InvokeAsync(() =>
+        {
+            Snackbar.Add($"{name}, added as new employee.", Severity.Success);
+        });
+    }
+    private async ValueTask<ItemsProviderResult<Employee>> ItemsProvider(ItemsProviderRequest request)
+    {
+        var ids = employeesIds.Skip(request.StartIndex).Take(request.Count).ToArray();
+        var items = await EmployeeService.GetManyByIdAsync(ids);
+        var result = new ItemsProviderResult<Employee>(items, employeesIds.Length);
+        return result;
+    }
     private void IEmployeeService_Changed()
     {
-        InvokeAsync(async () =>
-        {
-            await table.ReloadServerData();
-            Snackbar.Add("New employee added", Severity.Success);
-        });
+        InvokeAsync(table.ReloadServerData);
     }
 
     private async Task<TableData<Employee>> QueryEmployeesAsync(TableState tableState)
     {
-        var tableData = await EmployeeService.QueryEmployeesAsync(tableState, filterText);
+        var queryResult = await EmployeeService.QueryEmployeesAsync(tableState, filterText);
+        var tableData = queryResult.tableData;
+        totalCount = queryResult.totalCount;
+        employeesIds = tableData.Items.Select(a => a.Id).ToArray();
+
+        StateHasChanged();
+
         return tableData;
     }
 
@@ -42,6 +65,21 @@ public partial class EmployeesComp : IDisposable
     {
         filterText = text;
         await table.ReloadServerData();
+    }
+
+    private void ShowAddDialog()
+    {
+        DialogService.Show<AddEmployeeDialog>("New Employee", new DialogOptions()
+        {
+            CloseButton = true,
+            CloseOnEscapeKey = true,
+            DisableBackdropClick = false,
+            FullScreen = false,
+            FullWidth = false,
+            MaxWidth = MaxWidth.ExtraLarge,
+            NoHeader = false,
+            Position = DialogPosition.Center,
+        });
     }
 
     private static string MakeDobString(DateOnly dob)
@@ -57,5 +95,6 @@ public partial class EmployeesComp : IDisposable
     public void Dispose()
     {
         IEmployeeService.Changed -= IEmployeeService_Changed;
+        IEmployeeService.NotifyNewName -= IEmployeeService_NotifyNewName;
     }
 }

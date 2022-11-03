@@ -1,0 +1,39 @@
+﻿@using BlazorShowcase.Employees
+<MudDialog>
+    <DialogContent>
+        <MudForm @ref="form" Model="model" Validation="validator.ValidateValue()">
+            <MudTextField Immediate="true"
+                          AutoFocus="true"
+                          OnlyValidateIfDirty="true"
+                          @bind-Value="model.Name"
+                          For="()=>model.Name"
+                          Label="Name" />
+
+
+            <MudTextField Immediate="true"
+                          OnlyValidateIfDirty="true"
+                          @bind-Value="model.Email"
+                          For="()=>model.Email"
+                          Label="Email" />
+
+            <MudDatePicker @bind-Date="model.Birth"
+                           For="()=>model.Birth"
+                           Label="DoB" />
+
+            <MudTextField Immediate="true"
+                          OnlyValidateIfDirty="true"
+                          @bind-Value="model.Address"
+                          For="()=>model.Address"
+                          Label="Address" />
+
+            <MudTextField Immediate="true"
+                          OnlyValidateIfDirty="true"
+                          @bind-Value="model.PhoneNumber"
+                          For="()=>model.PhoneNumber"
+                          Label="Phone Number" />
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="TryAdd">Add</MudButton>
+    </DialogActions>
+</MudDialog>

@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace BlazorShowcase.Pages.Graphics;
 
-public sealed partial class Chart : IAsyncDisposable
+public sealed partial class Chart : IDisposable
 {
     private readonly string id = Guid.NewGuid().ToString();
     private bool created = false;
@@ -129,10 +129,8 @@ public sealed partial class Chart : IAsyncDisposable
         await Js.InvokeVoidAsync("chart.clearPoints", id);
     }
 
-    public async ValueTask DisposeAsync()
+    public void Dispose()
     {
         created = false;
-        //       await Js.InvokeVoidAsync("chart.destroy", id);
     }
-
 }
