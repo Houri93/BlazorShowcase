@@ -86,10 +86,11 @@ public class EmployeeService : IEmployeeService
         return employees.ToArray();
     }
 
-    public async Task<(TableData<Employee> tableData, int totalCount)> QueryEmployeesAsync(TableState tableState, string filterText)
+    public async Task<(Guid[] Ids, int totalCount)> QueryEmployeesAsync(TableState tableState, string filterText)
     {
         filterText = filterText?.ToLower();
         var query = db.Employees.AsQueryable();
+        var queryExe = await query.ToArrayAsync();
 
         if (!string.IsNullOrEmpty(filterText))
         {
@@ -97,10 +98,12 @@ public class EmployeeService : IEmployeeService
             a.Birth.Value.ToString().ToLower().Contains(filterText)
             || a.Email.ToLower().Contains(filterText)
             || a.Name.ToLower().Contains(filterText)
+            || a.PhoneNumber.ToLower().Contains(filterText)
+            || a.Address.ToLower().Contains(filterText)
+            || a.Created.ToString().ToLower().Contains(filterText)
             );
-        }
 
-        var filteredCount = query.Count();
+        }
 
         switch (tableState.SortLabel)
         {
@@ -135,14 +138,8 @@ public class EmployeeService : IEmployeeService
         //    .Skip(skipCount)
         //    .Take(tableState.PageSize);
 
-        var inMemory = await query.Select(a => new Employee { Id = a.Id }).ToArrayAsync();
-
-        var tableData = new TableData<Employee>()
-        {
-            TotalItems = filteredCount,
-            Items = inMemory,
-        };
-
-        return (tableData, await db.Employees.CountAsync());
+        var Ids = await query.Select(a => a.Id).ToArrayAsync();
+        var totalCount = await db.Employees.CountAsync();
+        return (Ids, totalCount);
     }
 }

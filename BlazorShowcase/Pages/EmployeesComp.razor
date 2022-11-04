@@ -3,7 +3,7 @@
 
 <PageTitle>Employees</PageTitle>
 
-<MudTable @ref="table" ItemsProvider="ItemsProvider" ServerData="QueryEmployeesAsync" Height="calc(100vh - 180px)" FixedHeader="true" FixedFooter="true" T="Employee" Virtualize="true">
+<MudTable @ref="table" ItemsProvider="ItemsProvider" ServerData="QueryEmployeesAsync" Height="calc(100vh - 180px)" FixedHeader="true" T="Employee" Virtualize="true">
 
     <ToolBarContent>
         <MudText Typo="Typo.h6" Color="Color.Primary">Employees</MudText>
@@ -13,7 +13,7 @@
                       Placeholder="Search ..."
                       Value="filterText"
                       Immediate="false"
-                      Clearable="true"                     
+                      Clearable="true"
                       Adornment="Adornment.Start"
                       AdornmentIcon="@Icons.Material.Filled.Search"
                       IconSize="Size.Medium"

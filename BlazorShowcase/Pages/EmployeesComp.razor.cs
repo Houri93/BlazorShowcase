@@ -44,6 +44,12 @@ public partial class EmployeesComp : IDisposable
         var result = new ItemsProviderResult<Employee>(items, employeesIds.Length);
         return result;
     }
+
+    public void GetItems()
+    {
+
+    }
+
     private void IEmployeeService_Changed()
     {
         InvokeAsync(table.ReloadServerData);
@@ -52,13 +58,12 @@ public partial class EmployeesComp : IDisposable
     private async Task<TableData<Employee>> QueryEmployeesAsync(TableState tableState)
     {
         var queryResult = await EmployeeService.QueryEmployeesAsync(tableState, filterText);
-        var tableData = queryResult.tableData;
+        employeesIds = queryResult.Ids;
         totalCount = queryResult.totalCount;
-        employeesIds = tableData.Items.Select(a => a.Id).ToArray();
 
         StateHasChanged();
 
-        return tableData;
+        return new() { Items = Enumerable.Range(0, 10).Select(a => new Employee()), TotalItems = totalCount };
     }
 
     private async Task FilterTextChanged(string text)
