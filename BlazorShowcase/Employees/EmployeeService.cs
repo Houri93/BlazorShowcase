@@ -39,6 +39,10 @@ public class EmployeeService : IEmployeeService
         faker.RuleFor(a => a.Created, f => DateTime.Now);
 
         var employees = faker.Generate(count);
+        foreach (var e in employees)
+        {
+            e.FilterText = BuildFilterText(e);
+        }
 
         db.Employees.AddRange(employees);
 
@@ -52,10 +56,16 @@ public class EmployeeService : IEmployeeService
         }
     }
 
+    private string BuildFilterText(Employee model)
+    {
+        return $"{model.Name} {model.Email} {model.Address} {model.PhoneNumber} {model.Birth} {model.Created}".ToLower();
+    }
+
     public async Task AddAsync(Employee model)
     {
         model.Id = Guid.NewGuid();
         model.Created = DateTime.Now;
+        model.FilterText = BuildFilterText(model);
 
         db.Employees.Add(model);
         await db.SaveChangesAsync();
@@ -86,24 +96,17 @@ public class EmployeeService : IEmployeeService
         return employees.ToArray();
     }
 
-    public async Task<(Guid[] Ids, int totalCount)> QueryEmployeesAsync(TableState tableState, string filterText)
+    public async Task<TableData<Employee>> QueryEmployeesAsync(TableState tableState, string filterText)
     {
         filterText = filterText?.ToLower();
         var query = db.Employees.AsQueryable();
-        var queryExe = await query.ToArrayAsync();
 
         if (!string.IsNullOrEmpty(filterText))
         {
-            query = query.Where(a =>
-            a.Birth.Value.ToString().ToLower().Contains(filterText)
-            || a.Email.ToLower().Contains(filterText)
-            || a.Name.ToLower().Contains(filterText)
-            || a.PhoneNumber.ToLower().Contains(filterText)
-            || a.Address.ToLower().Contains(filterText)
-            || a.Created.ToString().ToLower().Contains(filterText)
-            );
-
+            query = query.Where(a => a.FilterText.Contains(filterText));
         }
+
+        var totalCount = query.Count();
 
         switch (tableState.SortLabel)
         {
@@ -132,14 +135,19 @@ public class EmployeeService : IEmployeeService
                 break;
         }
 
-        //var skipCount = tableState.Page * tableState.PageSize;
+        var skipCount = tableState.Page * tableState.PageSize;
 
-        //query = query
-        //    .Skip(skipCount)
-        //    .Take(tableState.PageSize);
+        query = query
+            .Skip(skipCount)
+            .Take(tableState.PageSize);
 
-        var Ids = await query.Select(a => a.Id).ToArrayAsync();
-        var totalCount = await db.Employees.CountAsync();
-        return (Ids, totalCount);
+        var inMemory = await query.ToArrayAsync();
+
+        return new()
+        {
+            Items = inMemory,
+            TotalItems = totalCount,
+        };
+
     }
 }

@@ -118,7 +118,15 @@ public class AuthService : AuthenticationStateProvider, IAuthService
             Id = Guid.NewGuid(),
             HashedPassword = Hasher.Hash("TeWqHmQgU9DxG6#Bi"),
             Username = "MarkThompson",
+        }); 
+        
+        db.Users.Add(new()
+        {
+            Id = Guid.NewGuid(),
+            HashedPassword = Hasher.Hash("TeWqHmQgU9DxG6#Bi"),
+            Username = "MarkThompson",             
         });
+
         await db.SaveChangesAsync();
     }
 

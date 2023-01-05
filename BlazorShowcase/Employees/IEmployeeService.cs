@@ -14,5 +14,5 @@ public interface IEmployeeService
     Task CreateDefaultsAsync();
     Task GenerateNewAsync(int count);
     Task<Employee[]> GetManyByIdAsync(params Guid[] ids);
-    Task<(Guid[] Ids, int totalCount)> QueryEmployeesAsync(TableState tableState, string filterText);
+    Task<TableData<Employee>> QueryEmployeesAsync(TableState tableState, string filterText);
 }

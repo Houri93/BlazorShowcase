@@ -16,7 +16,6 @@ namespace BlazorShowcase.Pages;
 public partial class EmployeesComp : IDisposable
 {
     private MudTable<Employee> table;
-    private int totalCount;
 
     private Guid[] employeesIds = Array.Empty<Guid>();
     private string filterText = string.Empty;
@@ -24,7 +23,7 @@ public partial class EmployeesComp : IDisposable
     [Inject] ISnackbar Snackbar { get; set; }
     [Inject] IDialogService DialogService { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         IEmployeeService.Changed += IEmployeeService_Changed;
         IEmployeeService.NotifyNewName += IEmployeeService_NotifyNewName;
@@ -57,13 +56,7 @@ public partial class EmployeesComp : IDisposable
 
     private async Task<TableData<Employee>> QueryEmployeesAsync(TableState tableState)
     {
-        var queryResult = await EmployeeService.QueryEmployeesAsync(tableState, filterText);
-        employeesIds = queryResult.Ids;
-        totalCount = queryResult.totalCount;
-
-        StateHasChanged();
-
-        return new() { Items = Enumerable.Range(0, 10).Select(a => new Employee()), TotalItems = totalCount };
+        return await EmployeeService.QueryEmployeesAsync(tableState, filterText);
     }
 
     private async Task FilterTextChanged(string text)
@@ -90,7 +83,7 @@ public partial class EmployeesComp : IDisposable
     private static string MakeDobString(DateOnly dob)
     {
         var age = DateTime.Now.Humanize(utcDate: false, dateToCompareAgainst: dob.ToDateTime(TimeOnly.FromTimeSpan(TimeSpan.Zero))).Replace(" from now", "");
-        return $"{dob.ToString()} ({age})";
+        return $"{dob} ({age})";
     }
     private static string MakeCreatedString(DateTime created)
     {

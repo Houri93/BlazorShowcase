@@ -51,24 +51,12 @@
 
     </RowTemplate>
 
-    @* <PagerContent>
+     <PagerContent>
     <MudTablePager />
-    </PagerContent>*@
+    </PagerContent>
 
     <NoRecordsContent>
         No matching records.
     </NoRecordsContent>
 
 </MudTable>
-
-
-<MudPaper Style="margin-top:10px">
-    <MudStack Row="true">
-        <MudSpacer></MudSpacer>
-        <MudText>Total Employees: @totalCount</MudText>
-        <MudSpacer></MudSpacer>
-        <MudText>Filtered Employees: @employeesIds.Length</MudText>
-        <MudSpacer></MudSpacer>
-    </MudStack>
-
-</MudPaper>
